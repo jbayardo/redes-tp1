@@ -76,6 +76,8 @@ for p in packets:
     conn_ip[p.psrc][p.pdst] += 1
     connections_ip.add_edge(p.psrc, p.pdst)
 
+f.close()
+
 # MAC transmissions plot
 nx.draw(connections_hw, with_labels=True)
 plt.savefig("{}/conn_mac.png".format(capture_session))
