@@ -1,0 +1,5 @@
+Entropy Protocols: 0.191509637201
+Entropy arp source MAC: 3.14983718638
+Entropy arp dest MAC: 0
+Entropy arp source IP: 3.13612780628
+Entropy arp dest IP: 4.43158345944
