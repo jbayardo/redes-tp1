@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from collections import Counter
 from collections import defaultdict
-from math import log
+from math import log10
 from datetime import datetime
 
 capture_session = 'captures/{:%Y%m%d_%H%M%S}'.format(datetime.now())
@@ -34,8 +34,8 @@ arp_mac_dst = defaultdict(int)
 arp_ip_src = defaultdict(int)
 arp_ip_dst = defaultdict(int)
 
-conn_ip = dict()
-conn_hw = dict()
+conn_ip = defaultdict(lambda: defaultdict(int))
+conn_hw = defaultdict(lambda: defaultdict(int))
 
 connections_ip = nx.Graph()
 connections_hw = nx.Graph()
@@ -66,13 +66,9 @@ for p in packets:
     arp_ip_dst[p.pdst] += 1
     arp_mac_src[p.hwsrc] += 1
 
-    if not conn_hw.has_key(p.hwsrc):
-      conn_hw[p.hwsrc] = defaultdict(int)
     conn_hw[p.hwsrc][p.hwdst] += 1
     connections_hw.add_edge(p.hwsrc, p.hwdst)
 
-    if not conn_ip.has_key(p.psrc):
-      conn_ip[p.psrc] = defaultdict(int)
     conn_ip[p.psrc][p.pdst] += 1
     connections_ip.add_edge(p.psrc, p.pdst)
 
@@ -90,7 +86,7 @@ plt.show()
 # Calculates entropy (receives dict with symbol as key and number of times it appeared as value)
 def entropy(samples):
   total = sum(samples.values())
-  return -sum([(float(samples.get(symbol)) / float(total) * log(float(samples.get(symbol)) / float(total))) for symbol in samples])
+  return -sum([(float(samples.get(symbol)) / float(total) * log10(float(samples.get(symbol)) / float(total))) for symbol in samples])
 
 # Entropy S Ej1: protocols as symbols
 entropy_s = entropy(protocols) 
