@@ -15,6 +15,7 @@ capture_session = 'captures/{:%Y%m%d_%H%M%S}'.format(datetime.now())
 if len(sys.argv) > 1:
   if len(sys.argv[1]) > 3 and sys.argv[1][-4:] == ".cap":
     packets = scapy.rdpcap(sys.argv[1])
+    capture_session = 'captures/temp'
   else:
     scan_time = int(sys.argv[1])
     packets = scapy.sniff(timeout=scan_time)
@@ -74,13 +75,14 @@ for p in packets:
 
 f.close()
 
+import ipdb; ipdb.set_trace()
 # MAC transmissions plot
 nx.draw(connections_hw, with_labels=True)
-plt.savefig("{}/conn_mac.png".format(capture_session))
+plt.savefig("{}/conn_mac.pdf".format(capture_session))
 plt.show()
 # IP transmissions plot
 nx.draw(connections_ip, with_labels=True)
-plt.savefig("{}/conn_ip.png".format(capture_session))
+plt.savefig("{}/conn_ip.pdf".format(capture_session))
 plt.show()
 
 # Calculates entropy (receives dict with symbol as key and number of times it appeared as value)
