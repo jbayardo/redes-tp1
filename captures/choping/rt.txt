@@ -1,0 +1,69 @@
+Routing tables
+
+Internet:
+Destination        Gateway            Flags        Refs      Use   Netif Expire
+default            172.50.0.1         UGSc          109        0     en1
+127                127.0.0.1          UCS             0        0     lo0
+127.0.0.1          127.0.0.1          UH              2      106     lo0
+169.254            link#5             UCS             0        0     en1
+172.50/22          link#5             UCS            42        0     en1
+172.50.0.1/32      link#5             UCS             1        0     en1
+172.50.0.1         8:0:27:2c:4d:4c    UHLWIir       110      397     en1   1198
+172.50.0.49        0:24:81:db:3e:bf   UHLWI           0      102     en1   1198
+172.50.0.117       48:43:7c:9c:64:94  UHLWI           0        0     en1   1149
+172.50.0.166       b4:52:7e:4b:9b:f8  UHLWI           0        0     en1   1116
+172.50.0.200       40:b8:37:3:9c:b3   UHLWI           0        0     en1    562
+172.50.0.203       78:31:c1:62:68:a1  UHLWI           0        0     en1    889
+172.50.0.216       a4:db:30:f7:c3:92  UHLWI           0        0     en1   1198
+172.50.0.218/32    link#5             UCS             0        0     en1
+172.50.0.226       80:56:f2:b8:df:83  UHLWI           0        0     en1   1086
+172.50.0.241       cc:89:fd:d1:96:44  UHLWI           0        0     en1    718
+172.50.1.8         e0:91:53:86:75:c7  UHLWIi          1      118     en1   1200
+172.50.1.14        c:e7:25:77:8f:28   UHLWI           0        0     en1    614
+172.50.1.19        58:1f:aa:4e:90:92  UHLWI           0        0     en1    917
+172.50.1.58        cc:29:f5:48:c4:dd  UHLWI           0        0     en1    973
+172.50.1.75        cc:78:5f:68:83:ad  UHLWI           0        0     en1   1054
+172.50.1.87        8c:18:d9:e5:a0:fa  UHLWI           0        0     en1   1051
+172.50.1.103       0:e0:4c:81:92:6e   UHLWI           0        0     en1   1137
+172.50.1.128       38:b:40:3b:fc:8e   UHLWI           0        0     en1    448
+172.50.1.161       b8:86:87:de:34:e   UHLWI           0        0     en1    944
+172.50.1.212       84:3a:4b:29:cf:2c  UHLWI           0        0     en1   1147
+172.50.1.235       94:65:9c:ca:b1:5b  UHLWI           0        0     en1    714
+172.50.2.45        44:d4:e0:95:77:82  UHLWI           0        0     en1    458
+172.50.2.73        38:59:f9:dd:85:24  UHLWI           0        0     en1   1195
+172.50.2.82        d4:f4:6f:17:5e:a9  UHLWI           0        0     en1    738
+172.50.2.99        64:e6:82:ce:e9:b7  UHLWI           0        0     en1   1029
+172.50.2.102       70:ec:e4:73:29:27  UHLWI           0        0     en1   1143
+172.50.2.138       84:63:d6:de:fb:d0  UHLWI           0        0     en1   1068
+172.50.2.162       54:4e:90:13:3:15   UHLWI           0        0     en1   1170
+172.50.2.202       c0:ce:cd:31:7a:7c  UHLWI           0        0     en1    335
+172.50.2.254       f0:99:bf:4e:1:2c   UHLWI           0        0     en1    455
+172.50.3.0         28:c2:dd:89:72:7b  UHLWI           0        0     en1   1179
+172.50.3.20        a0:e4:53:ca:f9:1   UHLWI           0        0     en1    312
+172.50.3.30        18:f6:43:49:83:35  UHLWI           0        0     en1   1199
+172.50.3.36        14:9a:10:94:40:ac  UHLWI           0        0     en1    654
+172.50.3.38        b4:52:7d:f9:a7:6b  UHLWI           0        0     en1    981
+172.50.3.44        38:b1:db:44:29:8b  UHLWI           0      106     en1   1195
+172.50.3.50        dc:37:14:4d:49:10  UHLWI           0        0     en1   1132
+172.50.3.65        b8:4f:d5:d0:13:2c  UHLWI           0        0     en1   1120
+172.50.3.134       38:f2:3e:85:68:60  UHLWI           0        0     en1   1178
+172.50.3.147       bc:54:36:78:a2:45  UHLWI           0        0     en1   1129
+172.50.3.173       20:16:d8:72:69:41  UHLWI           0        0     en1   1043
+172.50.3.208       34:c0:59:67:4c:3e  UHLWI           0        0     en1    798
+172.50.3.255       ff:ff:ff:ff:ff:ff  UHLWbI          0       41     en1
+
+Internet6:
+Destination                             Gateway                         Flags         Netif Expire
+::1                                     ::1                             UHL             lo0
+fe80::%lo0/64                           fe80::1%lo0                     UcI             lo0
+fe80::1%lo0                             link#1                          UHLI            lo0
+fe80::%en1/64                           link#5                          UCI             en1
+fe80::d2a6:37ff:fee4:d250%en1           d0:a6:37:e4:d2:50               UHLI            lo0
+fe80::%awdl0/64                         link#9                          UCI           awdl0
+fe80::cc43:aff:fef3:8e95%awdl0          ce:43:a:f3:8e:95                UHLI            lo0
+ff01::%lo0/32                           ::1                             UmCI            lo0
+ff01::%en1/32                           link#5                          UmCI            en1
+ff01::%awdl0/32                         link#9                          UmCI          awdl0
+ff02::%lo0/32                           ::1                             UmCI            lo0
+ff02::%en1/32                           link#5                          UmCI            en1
+ff02::%awdl0/32                         link#9                          UmCI          awdl0
