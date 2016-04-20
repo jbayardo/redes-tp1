@@ -23,8 +23,9 @@ else:
   scan_time = 20
   packets = scapy.sniff(timeout=scan_time)
 
+if capture_session == 'captures/temp' and (not 'temp' in os.listdir('./captures/')):
+  os.makedirs(capture_session)
 
-os.makedirs("{}".format(capture_session))
 scapy.wrpcap("{}/dump.cap".format(capture_session), packets)
 f = open('{}/data.csv'.format(capture_session),'w')
 f.write('protocol, hwsrc, hwdst, ipsrc, ipdst, whois\n')
@@ -75,14 +76,15 @@ for p in packets:
 
 f.close()
 
-import ipdb; ipdb.set_trace()
+# IP transmissions plot
+d = nx.degree(connections_ip)
+nx.draw(connections_ip, nodelist=d.keys(), node_size=[v * 100 for v in d.values()], alpha=0.25,  node_color='r', font_size=11, edge_color='r', with_labels=True)
+plt.savefig("{}/conn_ip.pdf".format(capture_session))
+plt.show()
+
 # MAC transmissions plot
 nx.draw(connections_hw, with_labels=True)
 plt.savefig("{}/conn_mac.pdf".format(capture_session))
-plt.show()
-# IP transmissions plot
-nx.draw(connections_ip, with_labels=True)
-plt.savefig("{}/conn_ip.pdf".format(capture_session))
 plt.show()
 
 # Calculates entropy (receives dict with symbol as key and number of times it appeared as value)
