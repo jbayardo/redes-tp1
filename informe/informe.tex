@@ -85,7 +85,13 @@ Finalmente, presentaremos las conclusiones y lecciones aprendidas a partir de lo
 
 Primero, recapitulemos sobre el funcionamiento de ARP en una red IPv4. ARP es un protocolo orientado a la resolución de addresses de hardware a partir de addresses IP: cuando un host A pretende comunicarse con otro host B dentro de la misma red de área local, precisa de la MAC address del host B para poder enviar el paquete al destino; de por sí, ningún host poseé esta información sobre ningún otro host y, por ende, precisamos de una metodología para obtenerla.
 
-En el caso de ARP, esto se realiza a través de dos paquetes enviados sobre IP: los ARP Whois y ARP Is At. En el primer caso, el host A precisa saber el MAC address de B, y por ende envía un paquete de este tipo, donde los campos de source de Ethernet e IP serán los de A, y el MAC address destino será FF:FF:FF:FF (address de broadcast para Ethernet), y el IP address de destino será el IP con el que A quiere comunicarse. 
+En el caso de ARP, esto se realiza a través de dos paquetes enviados sobre IP: los ARP Whois y ARP Is At. En el primer caso, el host A precisa saber el MAC address de B, y por ende envía un paquete de este tipo, donde los campos de source de Ethernet e IP serán los de A, y el MAC address destino será FF:FF:FF:FF (address de broadcast para Ethernet), y el IP address de destino será el IP con el que A quiere comunicarse. Luego, todos los nodos dentro de la misma red que reciban el paquete re-enviaran el paquete en todas las otras interfaces en las que aun se encuentren dentro de la red local. La única excepción a esta regla es si la interfaz por la que se recibió el paquete tiene asignada la IP de destino del paquete Whois. En este caso, el host enviará un paquete de tipo ARP Is At, con destination igual al source del paquete anterior, y source con los datos propios del host. Una vez que el host que realizó el Whois recibe el IsAt, tiene la MAC Address del host que estaba buscando en el campo de source.
+
+Pensemos, entonces, en cómo seleccionar un host distinguido basándonos únicamente en los paquetes ARP: tenemos 5 campos posibles para pensar: tipo de paquete, source IP address, source MAC address, destination IP address y destination MAC address. Como los tipos de paquete pueden ser 2, pensemos qué pasa con cada uno de estos campos en ambos casos:
+
+Si el paquete es de tipo Whois, queda claro que el destination MAC address no nos va a brindar ninguna información, ya que está fijado a FF:FF:FF:FF. Por otro lado, el source IP address y source MAC address tampoco lo harán: cualquier host que deseé enviar un paquete IP precisará de estos campos, y por ende tendremos muchos host, donde los que sobresaldrán serán aquellos que busquen muchos destinos. Por otro lado, el destination IP address nos da una buena medida de qué IPs son las más requeridas.
+
+En el caso contrario, tenemos que los destination MAC e IP addresses, junto con source IP address, cumplirán los mismos roles que tenían anteriormente, y por ende la información será la misma, pero el source MAC address ahora si tendrá un valor, que será específicamente el del nodo requerido. Observemos que esto también nos da una medida de "popularidad" entre nodos de la red, de la misma forma en que lo hacía anteriormente el destination IP address (de hecho, asumiendo que no se perdiesen paquetes en ningún momento, deberían darno
 
 Para distinguir tanto protocolos como nodos en la red, vamos a centrarnos en observar los gráficos que nos muestran la información (en términos de teoría de la información) que provee una Destination IP Address y tomar la IP que menos información tenga. De esta manera, estaremos quedandonos con el nodo que más apareció en el destino de los paquetes ARP que capturamos. Para distinguir protocolos vamos a hacer lo mismo, es decir quedarnos con el protocolo de menor información y dicho protocolo va a ser el que más fue utilizado.
 
@@ -244,13 +250,21 @@ Hubo una peculiaridad en esta captura, no se capturo ni un ARP is-at, se uso la 
 \subsubsection{Protocolos}
 Para esta fuente de información, como dije previamente, los únicos símbolos presentes fueron 3: IPv4, IPv6 y ARP. Veamos cual es la información de cada símbolo:
 
-Foto de protocolos
+\begin{figure}[H]
+\centering
+\includegraphics[width=420pt]{captures/MercadoLibre/Protocol PDF Dashboard.png}
+\caption{Cantidad de información de cada protocolo.}
+\end{figure}
 
 Se puede ver claramente que IPv4 presenta poca información a la fuente, esto significa que se presenta mucho en esta captura. Además veamos que los otros dos protocolos, al mostrar un contenido de información mayor, significan que no incidieron mucho en nuestra red.
 
 Veamos las probabilidades ahora para ver mas claro el resultado a la hora de hablar de cantidades:
 
-Imagen de probabilidades
+\begin{figure}[H]
+\centering
+\includegraphics[width=420pt]{captures/MercadoLibre/Protocol PDF Dashboard probability.png}
+\caption{Probabilidad de cada protocolo.}
+\end{figure}
 
 Es claro que IPv4 fue el protocolo que mas apareció por mucho, lo cual coincide con lo que contábamos en la presentación. 
 
