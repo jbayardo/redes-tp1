@@ -95,13 +95,15 @@ En el caso contrario, tenemos que los destination MAC e IP addresses, junto con 
 
 Con esto en mente, nos pareció relevante elegir como router al nodo cuya IP tenga la menor cantidad de información considerando una fuente que emite los destination MAC address de los paquetes ARP Whois. La idea detrás de esto es la siguiente:
 
-En una red LAN con acceso a Internet a través de uno o más routers, lo más probable es que los host de la LAN tiendan a buscar hosts que estén fuera de la red local, y por ende deban enviar el paquete al router para ser forwarded hacia 
-
-Para distinguir tanto protocolos como nodos en la red, vamos a centrarnos en observar los gráficos que nos muestran la información (en términos de teoría de la información) que provee una Destination IP Address y tomar la IP que menos información tenga. De esta manera, estaremos quedandonos con el nodo que más apareció en el destino de los paquetes ARP que capturamos. Para distinguir protocolos vamos a hacer lo mismo, es decir quedarnos con el protocolo de menor información y dicho protocolo va a ser el que más fue utilizado.
+En una red LAN con acceso a Internet, lo más probable es que los host de la LAN tiendan a buscar hosts que estén fuera de la red local, y por ende deban enviar el paquete hacia su default gateway para ser forwarded hacia el proveedor de internet. Esta simple observación nos dice que el router tiene altas probabilidades de ser el host con el que más busquemos conectarnos dentro de la red local; teniendo como posibles contendientes a servidores locales que puedan tener mucho uso (por ejemplo, un servidor DNS corriendo por separado, un fileserver, etcétera). 
 
 \subsection{Aclaraciones sobre la recolección y análisis de datos}
-Para la presentación de los datos se decidió obviar los que sean de probabilidad menor a 7e(-4)
 
+La recolección de datos fue realizada con Scapy según el enunciado del TP, exportados a csv, y procesados con Tableau. Los archivos correspondientes se encuentran en la carpeta raíz del trabajo práctico. Las redes analizadas son, en orden de presentación, la red Wi-Fi abierta Laboratorios-DC de la facultad, la red laboral con medios mixtos de Mercado Libre, la red Wi-Fi abierta del Shopping Dot, la red Wi-Fi abierta de un McDonalds, y una red Wi-Fi casera sobre la que tenemos control. Observemos que las elecciones nos permiten analizar un abanico interesante de combinaciones posibles, aunque lamentablemente la falta de información sobre la topología de la mayoría de las redes sólo nos permite conjeturar.
+
+En términos de la presentación de los datos, debido a la gran cantidad de hosts que encontramos en la mayoría de las redes, fue necesario excluir muchos de estos de los gráficos presentados para que los mismos sean legibles. Para la exclusión, consideramos un corte donde los nodos cuya probabilidad de aparición sea menor a X (dependiente del gráfico) son excluídos. Este filtro fue aplicado sobre todos los gráficos con excepción de la red casera, y la probabilidad X fue de 4e(-4) en todos los casos con excepción de la red de Mercado Libre, donde el corte fue de ligeramente menor.
+
+Esto es relevante debido a que nosotros mostramos marcas para la entropía y promedio de las distribuciones de probabilidad, y queremos aclarar que si bien el promedio está tomado únicamente sobre los datos mostrados en los gráficos, la entropía está calculada sobre el total de la distribución (es decir, es lo que debería ser). Esto es debido a una restricción del software utilizado para graficar, y lamentablemente no encontramos forma de arreglar el problema.
 
 \newpage
 \section{Primer Experimento: Laboratorios-DC}
@@ -262,7 +264,7 @@ Para esta fuente de información, como dije previamente, los únicos símbolos p
 
 Se puede ver claramente que IPv4 presenta poca información a la fuente, esto significa que se presenta mucho en esta captura. Además veamos que los otros dos protocolos, al mostrar un contenido de información mayor, significan que no incidieron mucho en nuestra red.
 
-Veamos las probabilidades ahora para ver mas claro el resultado a la hora de hablar de cantidades:
+\par Veamos las probabilidades ahora para ver mas claro el resultado a la hora de hablar de cantidades:
 
 \begin{figure}[H]
 \centering
@@ -272,14 +274,22 @@ Veamos las probabilidades ahora para ver mas claro el resultado a la hora de hab
 
 Es claro que IPv4 fue el protocolo que mas apareció por mucho, lo cual coincide con lo que contábamos en la presentación. 
 
-En interesante ver que, aunque en poca cantidad, se ve un trafico IPv6, por lo que uno asume que cierta infraestructura debe haberse migrado al nuevo protocolo.
+\par En interesante ver que, aunque en poca cantidad, se ve un trafico IPv6, por lo que uno asume que cierta infraestructura debe haberse migrado al nuevo protocolo.
 
 \subsubsection{Nodos ARP}
 En este experimento, como contamos antes, no hubo ningún trafico capturado de packetes ARP is-at. Esto nos resulto muy extraño, ya que es la base de la capa de enlace. En esta red WiFi, hay una única SSID pero varios access points, y para nosotros es una incógnita como se maneja el hecho de crear una única subnet a la que se puede acceder desde varios puntos de accesos. Por un lado suponemos que debería hacerse un broadcast a todos los AP de todo paquete broadcasteado en cualquiera de ellos, ya que un host va a buscar enviar un paquete a otro host en su subnet utilizando su dirección física y sin necesidad de ser routeado por el AP. Por otro lado, al ser una red tan grande, esto generaría mucho trafico en toda la red subneteada. Lo que terminamos suponiendo es que los paquetes no se broadcastean a todos los APs ya que en ese caso habría una mayor posibilidad de ver ARP is-ats, pero al no tener ninguno no pudimos analizar muy bien esta situación.
 
-Como siempre, tomaremos como símbolo de la fuente de información a varios campos del paquete ARP por separado: MAC source, MAC destination, IP source y IP destination.
+\par Como siempre, tomaremos como símbolo de la fuente de información a varios campos del paquete ARP por separado: MAC source, MAC destination, IP source y IP destination.
 
-Veamos que capturamos desde el punto de vista de información:
+\par Veamos que capturamos desde el punto de vista de información:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=420pt]{captures/MercadoLibre/PDFs Dashboard.png}
+\caption{Información de cada símbolo, para cada fuente de información.}
+\end{figure}
+
+
 
 \newpage
 \section{Cuarto Experimento: Red Controlada}
@@ -337,7 +347,7 @@ El gráfico que se encuentra en la esquina superior izquierda nos muestra la can
 
 \section{Conclusiones}
 
-Pudimos observar que, por lo general, las redes analizadas tienden a "distinguir" ciertos nodos como los que más tráfico generan (y reciben), estos suelen ser los Gateways que permiten conectarse a internet. No es una sorpresa esto, ya que en general, y en particular en los tipos redes wifi que analizamos (excluyendo el caso de Mercadolibre, que es más relativo), las redes wifi no suelen ser usadas tanto para conectar dispositivos dentro de la misma red, sino para proveer acceso a Internet.
+Encontramos que las redes analizadas tienden a a ciertos nodos como los que más tráfico generan (y reciben), estos suelen ser los Gateways que permiten conectarse a internet. No es una sorpresa esto, ya que en general, y en particular en los tipos redes wifi que analizamos (excluyendo el caso de Mercadolibre, que es más relativo), las redes wifi no suelen ser usadas tanto para conectar dispositivos dentro de la misma red, sino para proveer acceso a Internet.
 
 
 El hecho de hacer un experimento sobre una red controlada, como punto de comparación con las otras 3 redes (una semi-controlada, la de mercadolibre, y las otras dos públicas y libres), nos permitió poder corroborar algunas de las hipótesis y forzar ciertas condiciones sobre la misma antes de comenzar la captura que no hubiera sido posible hacerlo con redes no controladas como las anteriores. En redes caseras como esta vemos que el router tiene una incidencia importante y el tráfico de paquetes suele ser reducido. En particular la cantidad de paquetes ARP fue muy reducida (incluso reseteando el router antes de comenzar las capturas) y los de IPv4 predominaron.
