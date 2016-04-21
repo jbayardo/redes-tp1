@@ -91,7 +91,11 @@ Pensemos, entonces, en cómo seleccionar un host distinguido basándonos únicam
 
 Si el paquete es de tipo Whois, queda claro que el destination MAC address no nos va a brindar ninguna información, ya que está fijado a FF:FF:FF:FF. Por otro lado, el source IP address y source MAC address tampoco lo harán: cualquier host que deseé enviar un paquete IP precisará de estos campos, y por ende tendremos muchos host, donde los que sobresaldrán serán aquellos que busquen muchos destinos. Por otro lado, el destination IP address nos da una buena medida de qué IPs son las más requeridas.
 
-En el caso contrario, tenemos que los destination MAC e IP addresses, junto con source IP address, cumplirán los mismos roles que tenían anteriormente, y por ende la información será la misma, pero el source MAC address ahora si tendrá un valor, que será específicamente el del nodo requerido. Observemos que esto también nos da una medida de "popularidad" entre nodos de la red, de la misma forma en que lo hacía anteriormente el destination IP address (de hecho, asumiendo que no se perdiesen paquetes en ningún momento, deberían darno
+En el caso contrario, tenemos que los destination MAC e IP addresses, junto con source IP address, cumplirán los mismos roles que tenían anteriormente, y por ende la información será la misma, pero el source MAC address ahora si tendrá un valor, que será específicamente el del nodo requerido. Observemos que esto también nos da una medida de "popularidad" entre nodos de la red, de la misma forma en que lo hacía anteriormente el destination IP address (de hecho, asumiendo que no se perdiesen paquetes en ningún momento, y el router tuviera una única IP asignada a la interfaz con ese MAC, deberían darnos la misma cantidad de información).
+
+Con esto en mente, nos pareció relevante elegir como router al nodo cuya IP tenga la menor cantidad de información considerando una fuente que emite los destination MAC address de los paquetes ARP Whois. La idea detrás de esto es la siguiente:
+
+En una red LAN con acceso a Internet a través de uno o más routers, lo más probable es que los host de la LAN tiendan a buscar hosts que estén fuera de la red local, y por ende deban enviar el paquete al router para ser forwarded hacia 
 
 Para distinguir tanto protocolos como nodos en la red, vamos a centrarnos en observar los gráficos que nos muestran la información (en términos de teoría de la información) que provee una Destination IP Address y tomar la IP que menos información tenga. De esta manera, estaremos quedandonos con el nodo que más apareció en el destino de los paquetes ARP que capturamos. Para distinguir protocolos vamos a hacer lo mismo, es decir quedarnos con el protocolo de menor información y dicho protocolo va a ser el que más fue utilizado.
 
@@ -272,6 +276,10 @@ En interesante ver que, aunque en poca cantidad, se ve un trafico IPv6, por lo q
 
 \subsubsection{Nodos ARP}
 En este experimento, como contamos antes, no hubo ningún trafico capturado de packetes ARP is-at. Esto nos resulto muy extraño, ya que es la base de la capa de enlace. En esta red WiFi, hay una única SSID pero varios access points, y para nosotros es una incógnita como se maneja el hecho de crear una única subnet a la que se puede acceder desde varios puntos de accesos. Por un lado suponemos que debería hacerse un broadcast a todos los AP de todo paquete broadcasteado en cualquiera de ellos, ya que un host va a buscar enviar un paquete a otro host en su subnet utilizando su dirección física y sin necesidad de ser routeado por el AP. Por otro lado, al ser una red tan grande, esto generaría mucho trafico en toda la red subneteada. Lo que terminamos suponiendo es que los paquetes no se broadcastean a todos los APs ya que en ese caso habría una mayor posibilidad de ver ARP is-ats, pero al no tener ninguno no pudimos analizar muy bien esta situación.
+
+Como siempre, tomaremos como símbolo de la fuente de información a varios campos del paquete ARP por separado: MAC source, MAC destination, IP source y IP destination.
+
+Veamos que capturamos desde el punto de vista de información:
 
 \newpage
 \section{Cuarto Experimento: Red Controlada}
